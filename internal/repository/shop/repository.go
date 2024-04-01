@@ -8,6 +8,7 @@ import (
 	"github.com/kirillmc/TZ_Go_junior_online_shop/internal/repository"
 	"github.com/kirillmc/TZ_Go_junior_online_shop/internal/repository/shop/converter"
 	modelRepo "github.com/kirillmc/TZ_Go_junior_online_shop/internal/repository/shop/model"
+	"log"
 )
 
 const (
@@ -113,13 +114,13 @@ func NewRepository(db *pgxpool.Pool) repository.ShopRepository {
 //	return nil, nil
 //}
 
-func (r *repo) GetProductsFromOrder(ctx context.Context, orderId int64) (*[]model.Item, error) {
+func (r *repo) GetProductsFromOrders(ctx context.Context, orders string) (*[]model.Item, error) {
 	query := fmt.Sprintf("SELECT orders_products.order_id, orders_products.product_id, products.name, orders_products.count, shelfs.name "+
 		"FROM orders INNER join orders_products ON orders.id = orders_products.order_id "+
 		"INNER join products ON orders_products.product_id = products.id "+
-		"INNER join shelfs ON products.id = shelfs.product_id WHERE orders.id=$1 AND shelfs.is_main=%t", true)
-
-	rows, err := r.db.Query(ctx, query, orderId)
+		"INNER join shelfs ON products.id = shelfs.product_id WHERE orders.id in (%s) and shelfs.is_main=true ORDER BY shelfs.name", orders)
+	log.Printf("orders is %s", orders)
+	rows, err := r.db.Query(ctx, query)
 	if err != nil {
 		return nil, err
 	}
@@ -175,4 +176,15 @@ SELECT orders_products.order_id, orders_products.product_id, products.name, orde
 FROM orders INNER join orders_products ON orders.id = orders_products.order_id
 INNER join products ON orders_products.product_id = products.id
 INNER join shelfs ON products.id = shelfs.product_id WHERE shelfs.name = 'А' and shelfs.is_main=true
+*/
+
+/**
+insert into products (name)
+values ('Но11утбук');
+
+insert into orders_products (product_id, order_id, count)
+values (7, 10, 55);
+
+insert into shelfs (product_id, name, is_main)
+values (7, 'Ё', true);
 */

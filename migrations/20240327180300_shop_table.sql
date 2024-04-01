@@ -61,6 +61,10 @@ values (1, 'А', true),
        (5, 'А', false),
        (6, 'Ж', true);
 
+CREATE INDEX shelf_name ON shelfs (name);
+CREATE INDEX shelf_main ON shelfs (is_main);
+CREATE INDEX shelf_product ON shelfs (product_id);
+
 -- +goose Down
 drop table orders_products;
 drop table shelfs;

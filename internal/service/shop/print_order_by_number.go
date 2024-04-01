@@ -4,18 +4,17 @@ import (
 	"context"
 	"fmt"
 	"github.com/kirillmc/TZ_Go_junior_online_shop/internal/model"
-	"sort"
 )
 
-func (s *serv) PrintOrderByNumber(ctx context.Context, numbers []int64) error {
+func (s *serv) PrintOrderByNumber(ctx context.Context, orders string) error {
 	items := []model.Item{}
-	for _, i := range numbers {
-		itms, err := s.shopRepository.GetProductsFromOrder(ctx, i)
-		if err != nil {
-			return err
-		}
-		items = append(items, *itms...)
+
+	itms, err := s.shopRepository.GetProductsFromOrders(ctx, orders)
+	if err != nil {
+		return err
 	}
+
+	items = append(items, *itms...)
 
 	for i, item := range items {
 		addShelfs, err := s.shopRepository.GetAddShelfsFromProduct(ctx, item.Id)
@@ -37,10 +36,6 @@ func printer(items []model.Item) {
 		fmt.Print(s)
 	}
 	if len(items) > 1 {
-		sort.Slice(items, func(i, j int) bool {
-			return items[i].MainShelf < items[j].MainShelf
-		})
-
 		for i := 1; i < len(items); i++ {
 			if items[i-1].MainShelf != items[i].MainShelf {
 				s := fmt.Sprintf("===Стеллаж %s\n%s", items[i].MainShelf, strElem(items[i]))

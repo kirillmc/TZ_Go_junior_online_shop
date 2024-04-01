@@ -10,16 +10,12 @@ import (
 	shopSrv "github.com/kirillmc/TZ_Go_junior_online_shop/internal/service/shop"
 	"log"
 	"os"
-	"strconv"
-	"strings"
 )
 
 func main() {
 	if len(os.Args) <= 1 {
 		log.Fatalf("You must to enter number(s) of order")
 	}
-
-	args := os.Args[1]
 
 	ctx := context.Background()
 
@@ -43,17 +39,7 @@ func main() {
 	shopServ := shopSrv.NewService(shopRepo)
 	api := shopApi.NewImplementation(shopServ)
 
-	var orders []int64
-	strArgs := strings.Split(args, ",")
-	for _, arg := range strArgs {
-		ord, err := strconv.ParseInt(arg, 10, 64)
-		if err != nil {
-			log.Fatalf("failed to get arg: %v", err)
-		}
-		orders = append(orders, ord)
-	}
-
-	err = api.PrintOrderByNumber(ctx, orders)
+	err = api.PrintOrderByNumber(ctx, os.Args[1])
 	if err != nil {
 		log.Fatalf("failed to run: %v", err)
 	}
