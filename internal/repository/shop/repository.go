@@ -3,7 +3,6 @@ package shop
 import (
 	"context"
 	"fmt"
-	"log"
 
 	"github.com/jackc/pgx/v4/pgxpool"
 	"github.com/kirillmc/TZ_Go_junior_online_shop/internal/model"
@@ -25,7 +24,6 @@ func (r *repo) GetProductsFromOrders(ctx context.Context, orders string) (*[]mod
 		"FROM orders INNER join orders_products ON orders.id = orders_products.order_id "+
 		"INNER join products ON orders_products.product_id = products.id "+
 		"INNER join shelfs ON products.id = shelfs.product_id WHERE orders.id in (%s) and shelfs.is_main=true ORDER BY shelfs.name", orders)
-	log.Printf("orders is %s", orders)
 	rows, err := r.db.Query(ctx, query)
 	if err != nil {
 		return nil, err
