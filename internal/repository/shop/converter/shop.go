@@ -1,7 +1,9 @@
 package converter
 
-import "github.com/kirillmc/TZ_Go_junior_online_shop/internal/model"
-import modelRepo "github.com/kirillmc/TZ_Go_junior_online_shop/internal/repository/shop/model"
+import (
+	"github.com/kirillmc/TZ_Go_junior_online_shop/internal/model"
+	modelRepo "github.com/kirillmc/TZ_Go_junior_online_shop/internal/repository/shop/model"
+)
 
 func ToItemFromRepo(items []modelRepo.Item) *[]model.Item {
 	var modelItems []model.Item

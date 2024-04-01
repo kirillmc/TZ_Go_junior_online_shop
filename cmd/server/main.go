@@ -2,14 +2,15 @@ package main
 
 import (
 	"context"
+	"log"
+	"os"
+
 	"github.com/jackc/pgx/v4/pgxpool"
 	shopApi "github.com/kirillmc/TZ_Go_junior_online_shop/internal/api/shop"
 	"github.com/kirillmc/TZ_Go_junior_online_shop/internal/config"
 	"github.com/kirillmc/TZ_Go_junior_online_shop/internal/config/env"
 	shopRep "github.com/kirillmc/TZ_Go_junior_online_shop/internal/repository/shop"
 	shopSrv "github.com/kirillmc/TZ_Go_junior_online_shop/internal/service/shop"
-	"log"
-	"os"
 )
 
 func main() {
@@ -33,6 +34,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("failed to connect to database: %v", err)
 	}
+
 	defer pool.Close()
 
 	shopRepo := shopRep.NewRepository(pool)
@@ -41,6 +43,6 @@ func main() {
 
 	err = api.PrintOrderByNumber(ctx, os.Args[1])
 	if err != nil {
-		log.Fatalf("failed to run: %v", err)
+		log.Fatalf("program returned error: %v", err)
 	}
 }

@@ -8,8 +8,3 @@ type Item struct {
 	MainShelf        string
 	AdditionalShelfs []string
 }
-
-type Product_Count struct {
-	Product_id int64
-	Count      int64
-}
